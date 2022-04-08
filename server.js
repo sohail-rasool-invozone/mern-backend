@@ -7,14 +7,20 @@ import connectDb from './config/db.js'
 import { notFound, errorHandler } from './middleware/errorMiddleWare.js'
 
 import productRoutes from './routes/productRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
-const app = express()
 connectDb()
+const app = express()
+app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send('server is running')
 })
+
 app.use('/api/products', productRoutes)
+
+app.use('/api/users', userRoutes)
+
 app.use(notFound)
 app.use(errorHandler)
 
