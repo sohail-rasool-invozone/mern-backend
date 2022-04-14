@@ -77,4 +77,26 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser, getUserProfile, registerUser }
+// @desc Update user profile
+// @route pul/api/users/profile
+// @access private route
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+  if (user) {
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.name
+    if (req.body.password) {
+      user.password = req.user.password
+    }
+    const updateUser = await user.save()
+    res.json({
+      _id: updateUser._id,
+      name: updateUser.name,
+      email: updateUser.email,
+      isAdmin: updateUser.isAdmin,
+      token: generateToken(user._id),
+    })
+  }
+})
+
+export { authUser, getUserProfile, registerUser, updateUserProfile }
